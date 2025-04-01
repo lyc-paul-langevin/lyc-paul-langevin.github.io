@@ -1,0 +1,90 @@
+<html>
+   <head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" language="javascript">
+        var paramOk = true;
+        function FaitTableau(n) {
+            this.length = n;
+            for (var i = 0; i <= n; i++) {
+                this[i] = 0
+            }
+            return this
+        }
+        function ParamValeur(nValeur) {
+            var nTemp = "";
+            for (var i=0;i<(param.length+1);i++) {
+                if (param[i].substring(0,param[i].indexOf("=")) == nValeur)
+                nTemp = param[i].substring(param[i].indexOf("=")+1,param[i].length)
+            }
+            return Decode(nTemp)
+        }
+        if (!location.search) {
+            paramOk = false;
+        }
+        else {
+            nReq = location.search.substring(1)
+            nReq = nReq.split("&");
+            param = new FaitTableau(nReq.length-1)
+            for (var i=0;i<(nReq.length);i++) {
+                param[i] = nReq[i]
+            }
+        }
+        function Decode(tChaine) {
+            while (true) {
+                var i = tChaine.indexOf("+");
+                if (i < 0) break;
+                tChaine = tChaine.substring(0,i) + "%20" + tChaine.substring(i + 1, tChaine.length);
+            }
+            return unescape(tChaine)
+        }
+        </script>
+        <script type="text/javascript" language="javascript">
+            if (paramOk) {
+                identifiant = ParamValeur("identifiant");
+                mdp = ParamValeur("mdp");
+            }
+        </script>
+   </head>
+   <body>
+    <form method="get" action="login1.html">
+        <p>Identifiant : <input type="text" name="identifiant" /></p>
+        <p>Mot de passe : <input type="password" name="mdp" /></p>
+        <p><input type="submit" name="Submit" value="Soumettre" /></p>
+    </form>
+    <span id="msg"></span>
+    <script src="http://192.168.5.1/www.users.gplus.admin/users.js"></script>
+    <script>
+        function bienvenue(userNom,userSite) {
+            var msg = "Bienvenue " + userNom + " sur l'espace de travail du G+";
+            document.getElementById("msg").innerHTML = msg;
+            document.location.href = userSite
+        };
+        function error() {
+            var error1 = "Accès refusé ❌";
+            document.getElementById("msg").innerHTML = error1;
+        };
+        if (paramOk) {
+            if (identifiant === user1.username) {
+                if (mdp === user1.password) {
+                    bienvenue(user1.firstname,user1.home);
+                }
+                else {
+                    error();
+                }
+            }
+            else if (identifiant === user2.username) {
+                if (mdp === user2.password) {
+                    bienvenue(user2.firstname,user2.home);
+                }
+                else {
+                    error();
+                }
+            }
+            else {
+                error();
+            }
+        }
+    </script>
+   </body>
+</html>
