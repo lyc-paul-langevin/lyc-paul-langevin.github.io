@@ -1,90 +1,40 @@
-<html>
-   <head>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
     <meta charset="UTF-8">
-    <title>Connexion - Lycée Paul Langevin (13)</title>
-    <script type="text/javascript" language="javascript">
-        var paramOk = true;
-        function FaitTableau(n) {
-            this.length = n;
-            for (var i = 0; i <= n; i++) {
-                this[i] = 0
-            }
-            return this
-        }
-        function ParamValeur(nValeur) {
-            var nTemp = "";
-            for (var i=0;i<(param.length+1);i++) {
-                if (param[i].substring(0,param[i].indexOf("=")) == nValeur)
-                nTemp = param[i].substring(param[i].indexOf("=")+1,param[i].length)
-            }
-            return Decode(nTemp)
-        }
-        if (!location.search) {
-            paramOk = false;
-        }
-        else {
-            nReq = location.search.substring(1)
-            nReq = nReq.split("&");
-            param = new FaitTableau(nReq.length-1)
-            for (var i=0;i<(nReq.length);i++) {
-                param[i] = nReq[i]
-            }
-        }
-        function Decode(tChaine) {
-            while (true) {
-                var i = tChaine.indexOf("+");
-                if (i < 0) break;
-                tChaine = tChaine.substring(0,i) + "%20" + tChaine.substring(i + 1, tChaine.length);
-            }
-            return unescape(tChaine)
-        }
-        </script>
-        <script type="text/javascript" language="javascript">
-            if (paramOk) {
-                identifiant = ParamValeur("identifiant");
-                mdp = ParamValeur("mdp");
-            }
-        </script>
-   </head>
-   <body>
-    <form method="get" action="login.html">
-        <p>Identifiant : <input type="text" name="identifiant" /></p>
-        <p>Mot de passe : <input type="password" name="mdp" /></p>
-        <p><input type="submit" name="Submit" value="Soumettre" /></p>
-    </form>
-    <span id="msg"></span>
-    <script src="js/users.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        .container { max-width: 300px; margin: auto; }
+        input, button { display: block; width: 100%; margin: 10px 0; padding: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Connexion</h2>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Mot de passe" required>
+        <button onclick="login()">Se connecter</button>
+        <button onclick="loginWithGitHub()">Se connecter avec GitHub</button>
+    </div>
+    
     <script>
-        function bienvenue(userNom,userSite) {
-            var msg = "Bienvenue " + userNom + " sur l'espace de travail du G+";
-            document.getElementById("msg").innerHTML = msg;
-            document.location.href = userSite
-        };
-        function error() {
-            var error1 = "Accès refusé ❌";
-            document.getElementById("msg").innerHTML = error1;
-        };
-        if (paramOk) {
-            if (identifiant === user1.username) {
-                if (mdp === user1.password) {
-                    bienvenue(user1.firstname,user1.home);
-                }
-                else {
-                    error();
-                }
-            }
-            else if (identifiant === user2.username) {
-                if (mdp === user2.password) {
-                    bienvenue(user2.firstname,user2.home);
-                }
-                else {
-                    error();
-                }
-            }
-            else {
-                error();
-            }
+        const supabase = supabase.createClient("VOTRE_SUPABASE_URL", "VOTRE_SUPABASE_ANON_KEY");
+
+        async function login() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            let { user, error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) alert(error.message);
+            else alert("Connexion réussie!");
+        }
+
+        async function loginWithGitHub() {
+            let { user, error } = await supabase.auth.signInWithOAuth({ provider: 'github' });
+            if (error) alert(error.message);
         }
     </script>
-   </body>
+</body>
 </html>
