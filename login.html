@@ -21,20 +21,22 @@
     </div>
     
     <script>
-        const supabase = supabase.createClient("https://vfqypibvmfshemqtxrib.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZmcXlwaWJ2bWZzaGVtcXR4cmliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM0OTY0ODgsImV4cCI6MjA1OTA3MjQ4OH0.6C7IylQ63xbzLRZeIat6IJMxYMgdShJZit-huJcxqNY");
+    // Initialisation correcte de Supabase
+    const { createClient } = supabase;
+    const supabase = supabase.createClient("https://vfqypibvmfshemqtxrib.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZmcXlwaWJ2bWZzaGVtcXR4cmliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM0OTY0ODgsImV4cCI6MjA1OTA3MjQ4OH0.6C7IylQ63xbzLRZeIat6IJMxYMgdShJZit-huJcxqNY");
 
-        async function login() {
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            let { user, error } = await supabase.auth.signInWithPassword({ email, password });
-            if (error) alert(error.message);
-            else alert("Connexion réussie!");
-        }
+    async function login() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        let { user, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) alert(error.message);
+        else alert("Connexion réussie!");
+    }
 
-        async function loginWithGitHub() {
-            let { user, error } = await supabase.auth.signInWithOAuth({ provider: 'github' });
-            if (error) alert(error.message);
-        }
-    </script>
+    async function loginWithGitHub() {
+        let { user, error } = await supabaseClient.auth.signInWithOAuth({ provider: 'github' });
+        if (error) alert(error.message);
+    }
+</script>
 </body>
 </html>
