@@ -4,7 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script type="module">
+        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+        // Initialisation de Supabase
+          const supabase = createClient("https://vfqypibvmfshemqtxrib.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZmcXlwaWJ2bWZzaGVtcXR4cmliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM0OTY0ODgsImV4cCI6MjA1OTA3MjQ4OH0.6C7IylQ63xbzLRZeIat6IJMxYMgdShJZit-huJcxqNY");
+
+        // Fonction de connexion avec email/mot de passe
+        window.login = async function() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            let { error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) alert(error.message);
+            else alert("Connexion réussie !");
+        };
+
+        // Connexion avec GitHub
+        window.loginWithGitHub = async function() {
+            let { error } = await supabase.auth.signInWithOAuth({ provider: 'github' });
+            if (error) alert(error.message);
+        };
+    </script>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
         .container { max-width: 300px; margin: auto; }
@@ -19,24 +39,7 @@
         <button onclick="login()">Se connecter</button>
         <button onclick="loginWithGitHub()">Se connecter avec GitHub</button>
     </div>
-    
-    <script type="module">
-    // Initialisation correcte de Supabase
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-    const supabase = supabase.createClient("https://vfqypibvmfshemqtxrib.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZmcXlwaWJ2bWZzaGVtcXR4cmliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM0OTY0ODgsImV4cCI6MjA1OTA3MjQ4OH0.6C7IylQ63xbzLRZeIat6IJMxYMgdShJZit-huJcxqNY");
-
-    async function login() {
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-        let { user, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) alert(error.message);
-        else alert("Connexion réussie!");
-    }
-
-    async function loginWithGitHub() {
-        let { user, error } = await supabaseClient.auth.signInWithOAuth({ provider: 'github' });
-        if (error) alert(error.message);
-    }
-</script>
 </body>
 </html>
+
+  
